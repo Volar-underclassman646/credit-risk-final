@@ -259,4 +259,4 @@ docker run -p 8000:8000 credit-risk-api
 ## Author
 
 ADITYA SATAPATHY
-![LINKEDIN](https://www.linkedin.com/in/adisatapathy)
+![(https://www.linkedin.com/in/adisatapathy)]
