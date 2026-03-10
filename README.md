@@ -76,12 +76,13 @@ Binary search finds the optimal approval threshold balancing acceptance rate vs.
 | Layer | Technology |
 |-------|-----------|
 | **ML** | scikit-learn, XGBoost, SHAP, SMOTE (imbalanced-learn) |
+| **Data Structres** | LRU Cache, Binary Search, Min-Heap, Hash Map |
 | **API** | FastAPI, Uvicorn, Pydantic validation |
-| **Database** | PostgreSQL on Azure, SQLAlchemy ORM |
-| **Cloud** | Azure Blob Storage, Azure PostgreSQL, Azure Identity |
+| **Database** | PostgreSQL on Azure|
+| **Cloud** | Azure Blob Storage, Azure PostgreSQL |
 | **Data** | Pandas, NumPy, Statsmodels |
 | **Testing** | pytest (38+ test cases) |
-| **Visualization** | Matplotlib, Seaborn, HTML Dashboard |
+| **Visualization** | Matplotlib, Seaborn, Power BI, Chart.js|
 
 ---
 
@@ -124,7 +125,7 @@ credit-risk-final/
 ├── models/                      # Trained .pkl + metrics JSON
 ├── reports/figures/             # ROC curves, SHAP plots, policy charts
 ├── dashboards/                  # Interactive HTML dashboard
-├── screenshots/                 # Power BI + Swagger UI screenshots
+├── screenshots/                 # Power BI + Swagger UI + Azure Cloud Deployment screenshots
 └── benchmarks/                  # Performance benchmarking suite
 ```
 
@@ -255,6 +256,7 @@ docker run -p 8000:8000 credit-risk-api
 
 ---
 
-## License
+## Author
 
-MIT
+ADITYA SATAPATHY
+![LINKEDIN](https://www.linkedin.com/in/adisatapathy)
