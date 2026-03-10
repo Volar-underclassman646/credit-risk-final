@@ -1,0 +1,16 @@
+data/raw/lending_club.csv
+data/processed/
+!data/raw/lending_club_sample.csv
+models/*.pkl
+models/*.joblib
+.env
+venv/
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.pbix.tmp
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

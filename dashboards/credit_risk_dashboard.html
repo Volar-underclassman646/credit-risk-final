@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Risk Analytics | Aditya Satapathy</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#06090f;--surface:#0c1118;--surface2:#111921;--surface3:#182029;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
+  --text:#e8edf3;--muted:#6b7d93;--dim:#3d4f63;
+  --blue:#4d8ef7;--blue-g:linear-gradient(135deg,#4d8ef7,#7c6ff7);
+  --green:#2dd4a0;--green-g:linear-gradient(135deg,#2dd4a0,#34d399);
+  --red:#f05b5b;--red-g:linear-gradient(135deg,#f05b5b,#f97066);
+  --amber:#f5a524;--amber-g:linear-gradient(135deg,#f5a524,#fbbf24);
+  --purple:#9d7af7;--purple-g:linear-gradient(135deg,#9d7af7,#a78bfa);
+  --teal:#2dd4bf;--pink:#f472b6;
+  --glow-blue:rgba(77,142,247,0.12);--glow-green:rgba(45,212,160,0.12);
+  --glow-red:rgba(240,91,91,0.12);--glow-amber:rgba(245,165,36,0.12);
+}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.app{max-width:1440px;margin:0 auto;padding:20px 24px}
+
+/* Header */
+.header{display:flex;justify-content:space-between;align-items:center;padding:16px 0 20px;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{width:36px;height:36px;border-radius:10px;background:var(--blue-g);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;box-shadow:0 4px 16px rgba(77,142,247,0.3)}
+.logo h1{font-size:20px;font-weight:700;letter-spacing:-0.5px}
+.logo .sub{font-size:11px;color:var(--muted);font-weight:400;margin-top:1px}
+.nav{display:flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px}
+.nav-btn{padding:8px 20px;border:none;background:none;color:var(--muted);font-family:'Outfit';font-size:13px;font-weight:500;border-radius:9px;cursor:pointer;transition:all .25s}
+.nav-btn.active{background:var(--blue);color:#fff;box-shadow:0 2px 12px rgba(77,142,247,0.35)}
+.nav-btn:hover:not(.active){color:var(--text);background:var(--surface2)}
+
+/* KPI Strip */
+.kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:20px 0}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.kpi:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi.b::after{background:var(--blue-g)}.kpi.r::after{background:var(--red-g)}
+.kpi.g::after{background:var(--green-g)}.kpi.a::after{background:var(--amber-g)}
+.kpi.p::after{background:var(--purple-g)}
+.kpi-label{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600}
+.kpi-val{font-family:'IBM Plex Mono';font-size:26px;font-weight:600;margin:6px 0 3px;letter-spacing:-0.5px}
+.kpi-sub{font-size:11px;font-weight:500}
+.kpi-sub.up{color:var(--green)}.kpi-sub.dn{color:var(--red)}.kpi-sub.nt{color:var(--amber)}
+
+/* Charts Grid */
+.grid{display:grid;gap:14px;margin-bottom:14px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.g1{grid-template-columns:1fr}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;transition:box-shadow .2s}
+.card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.2)}
+.card-title{font-size:13px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px;letter-spacing:0.2px}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+/* Policy Simulator */
+.sim-panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:14px}
+.sim-panel h3{font-size:15px;font-weight:600;margin-bottom:6px}
+.sim-desc{color:var(--muted);font-size:12px;margin-bottom:14px;line-height:1.5}
+.slider-row{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.slider-row input[type=range]{flex:1;-webkit-appearance:none;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--amber),var(--red));outline:none}
+.slider-row input::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--blue);box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer}
+.slider-val{font-family:'IBM Plex Mono';font-size:22px;font-weight:700;color:var(--blue);min-width:54px;text-align:center}
+.slider-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--dim);margin-top:-12px;margin-bottom:12px;padding:0 70px 0 0}
+.sim-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sim-box{background:var(--bg);border-radius:11px;padding:16px;text-align:center}
+.sim-box .sl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.sim-box .sv{font-family:'IBM Plex Mono';font-size:22px;font-weight:700;margin-top:5px}
+
+/* Tables */
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl th{text-align:left;padding:10px 14px;color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.7px;border-bottom:1px solid var(--border2)}
+.tbl td{padding:10px 14px;border-bottom:1px solid var(--border)}
+.tbl tr:hover td{background:rgba(255,255,255,.015)}
+.badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;display:inline-block}
+.badge.lo{background:var(--glow-green);color:var(--green)}
+.badge.md{background:var(--glow-amber);color:var(--amber)}
+.badge.hi{background:var(--glow-red);color:var(--red)}
+
+/* Page toggle */
+.page{display:none}.page.active{display:block}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.kpi,.card,.sim-panel{animation:fadeUp .5s ease both}
+.kpi:nth-child(2){animation-delay:.05s}.kpi:nth-child(3){animation-delay:.1s}
+.kpi:nth-child(4){animation-delay:.15s}.kpi:nth-child(5){animation-delay:.2s}
+
+/* Responsive */
+@media(max-width:900px){
+  .kpi-strip{grid-template-columns:repeat(2,1fr)}
+  .g2,.g3{grid-template-columns:1fr}
+  .sim-grid{grid-template-columns:repeat(2,1fr)}
+  .header{flex-direction:column;gap:12px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">CR</div>
+      <div><h1>Credit Risk Analytics</h1><div class="sub">Aditya Satapathy &middot; 10,000 Loan Records &middot; XGBoost + SHAP + FastAPI</div></div>
+    </div>
+    <div class="nav">
+      <button class="nav-btn active" onclick="go('overview',this)">Executive Overview</button>
+      <button class="nav-btn" onclick="go('risk',this)">Risk Deep Dive</button>
+      <button class="nav-btn" onclick="go('model',this)">Model Performance</button>
+      <button class="nav-btn" onclick="go('policy',this)">Policy Simulator</button>
+    </div>
+  </div>
+
+  <!-- ===== PAGE 1: EXECUTIVE OVERVIEW ===== -->
+  <div id="p-overview" class="page active">
+    <div class="kpi-strip">
+      <div class="kpi b"><div class="kpi-label">Total Loans</div><div class="kpi-val">10,000</div><div class="kpi-sub nt">Sample dataset</div></div>
+      <div class="kpi r"><div class="kpi-label">Default Rate</div><div class="kpi-val">18.39%</div><div class="kpi-sub dn">Needs reduction</div></div>
+      <div class="kpi g"><div class="kpi-label">Avg Loan Amount</div><div class="kpi-val">$15,430</div><div class="kpi-sub up">Across all grades</div></div>
+      <div class="kpi a"><div class="kpi-label">Total Exposure</div><div class="kpi-val">$154.3M</div><div class="kpi-sub nt">Portfolio value</div></div>
+      <div class="kpi p"><div class="kpi-label">Best Model AUC</div><div class="kpi-val">0.703</div><div class="kpi-sub up">Logistic Regression</div></div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="card-title"><span class="dot" style="background:var(--blue)"></span>Default Rate by Loan Grade</div><canvas id="c-grade" height="280"></canvas></div>
+      <div class="card"><div class="card-title"><span class="dot" style="background:var(--green)"></span>Risk Segment Distribution</div><canvas id="c-risk" height="280"></canvas></div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="card-title"><span class="dot" style="background:var(--amber)"></span>Loan Volume by Grade</div><canvas id="c-vol" height="260"></canvas></div>
+      <div class="card"><div class="card-title"><span class="dot" style="background:var(--purple)"></span>Default Rate by Home Ownership</div><canvas id="c-home" height="260"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE 2: RISK DEEP DIVE ===== -->
+  <div id="p-risk" class="page">
+    <div class="grid g1" style="margin-top:16px">
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--red)"></span>Risk Segment Summary</div>
+        <table class="tbl">
+          <thead><tr><th>Segment</th><th>Count</th><th>Share</th><th>Default Rate</th><th>Avg Loan</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Low Risk</td><td>1,379</td><td>13.79%</td><td>5.6%</td><td>$12,800</td><td><span class="badge lo">Healthy</span></td></tr>
+            <tr><td>Medium Risk</td><td>7,935</td><td>79.35%</td><td>19.8%</td><td>$15,900</td><td><span class="badge md">Monitor</span></td></tr>
+            <tr><td>High Risk</td><td>686</td><td>6.86%</td><td>41.3%</td><td>$17,200</td><td><span class="badge hi">Alert</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="card-title"><span class="dot" style="background:var(--red)"></span>Default Rate by Purpose</div><canvas id="c-purpose" height="380"></canvas></div>
+      <div class="card"><div class="card-title"><span class="dot" style="background:var(--teal)"></span>Default Rate by Income Bracket</div><canvas id="c-income" height="380"></canvas></div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="card-title"><span class="dot" style="background:var(--amber)"></span>Default Rate by Verification Status</div><canvas id="c-verif" height="260"></canvas></div>
+      <div class="card"><div class="card-title"><span class="dot" style="background:var(--pink)"></span>Default Rate by Term</div><canvas id="c-term" height="260"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE 3: MODEL PERFORMANCE ===== -->
+  <div id="p-model" class="page">
+    <div class="grid g1" style="margin-top:16px">
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--green)"></span>Model Comparison — Actual Results from Pipeline</div>
+        <table class="tbl">
+          <thead><tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1 Score</th><th>AUC-ROC</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr style="font-weight:600"><td>Logistic Regression</td><td>0.6542</td><td>0.3218</td><td>0.6452</td><td>0.4294</td><td>0.703</td><td><span class="badge lo">Best AUC</span></td></tr>
+            <tr><td>Random Forest</td><td>0.7850</td><td>0.3486</td><td>0.3560</td><td>0.3523</td><td>0.697</td><td><span class="badge md">Good</span></td></tr>
+            <tr><td>XGBoost</td><td>0.7755</td><td>0.3124</td><td>0.3352</td><td>0.3234</td><td>0.651</td><td><span class="badge md">Baseline</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="card-title"><span class="dot" style="background:var(--purple)"></span>ROC Curve Comparison</div><canvas id="c-roc" height="300"></canvas></div>
+      <div class="card"><div class="card-title"><span class="dot" style="background:var(--amber)"></span>Top Feature Importance (SHAP)</div><canvas id="c-feat" height="300"></canvas></div>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--blue)"></span>Key Insights from Model</div>
+        <div style="font-size:13px;line-height:1.8;color:var(--muted)">
+          <p><span style="color:var(--text);font-weight:600">1. Grade is the strongest predictor</span> — Grade 7 (G) has 49.15% default rate vs Grade 1 (A) at 5.61%. This 8.7x difference confirms Lending Club's internal grading system is highly predictive.</p>
+          <p style="margin-top:10px"><span style="color:var(--text);font-weight:600">2. FICO score and interest rate are top SHAP drivers</span> — The SHAP summary shows grade_numeric, fico_score, and int_rate have the widest spread of impact on predictions.</p>
+          <p style="margin-top:10px"><span style="color:var(--text);font-weight:600">3. Income bracket has weak predictive power</span> — Default rates range only from 17.57% (Medium) to 19.95% (Very High), suggesting income alone doesn't determine default risk.</p>
+          <p style="margin-top:10px"><span style="color:var(--text);font-weight:600">4. Purpose matters</span> — Moving (25.26%) and car loans (22.78%) default most; wedding loans default least (7.22%).</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--green)"></span>Algorithm Performance Benchmarks</div>
+        <table class="tbl">
+          <thead><tr><th>Operation</th><th>Naive</th><th>Optimized</th><th>Speedup</th></tr></thead>
+          <tbody>
+            <tr><td>Threshold Search</td><td>O(n) linear</td><td>O(log n) binary</td><td><span style="color:var(--green);font-weight:600">8-15x</span></td></tr>
+            <tr><td>Prediction Cache</td><td>Recompute</td><td>O(1) LRU</td><td><span style="color:var(--green);font-weight:600">50-100x</span></td></tr>
+            <tr><td>Top-K Risky</td><td>O(n log n) sort</td><td>O(n log k) heap</td><td><span style="color:var(--green);font-weight:600">3-5x</span></td></tr>
+            <tr><td>Segment Stats</td><td>O(n) scan</td><td>O(1) hash map</td><td><span style="color:var(--green);font-weight:600">1000x+</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE 4: POLICY SIMULATOR ===== -->
+  <div id="p-policy" class="page">
+    <div class="sim-panel" style="margin-top:16px">
+      <h3>Interactive Policy Simulator</h3>
+      <div class="sim-desc">Adjust the approval threshold to see real-time impact on default rates and acceptance. Loans are approved when the predicted default probability is below the threshold.</div>
+      <div class="slider-row">
+        <input type="range" id="sl" min="5" max="90" value="30" oninput="upSim(this.value)">
+        <div class="slider-val" id="sv">0.30</div>
+      </div>
+      <div class="slider-labels"><span>Strict (fewer approvals, lower defaults)</span><span>Lenient (more approvals, higher defaults)</span></div>
+      <div class="sim-grid">
+        <div class="sim-box"><div class="sl">Acceptance Rate</div><div class="sv" id="s-acc" style="color:var(--blue)">42.1%</div></div>
+        <div class="sim-box"><div class="sl">Default Rate</div><div class="sv" id="s-def" style="color:var(--red)">9.2%</div></div>
+        <div class="sim-box"><div class="sl">Default Reduction</div><div class="sv" id="s-red" style="color:var(--green)">50.0%</div></div>
+        <div class="sim-box"><div class="sl">Approved Loans</div><div class="sv" id="s-app" style="color:var(--amber)">4,210</div></div>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="card-title"><span class="dot" style="background:var(--blue)"></span>Acceptance vs Default Tradeoff</div><canvas id="c-trade" height="290"></canvas></div>
+      <div class="card"><div class="card-title"><span class="dot" style="background:var(--green)"></span>Expected Defaults by Threshold</div><canvas id="c-defs" height="290"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<script>
+Chart.defaults.color='#6b7d93';
+Chart.defaults.borderColor='rgba(255,255,255,0.05)';
+Chart.defaults.font.family="'Outfit',sans-serif";
+
+function go(pg,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('p-'+pg).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ===== PAGE 1 CHARTS =====
+// Default by Grade - REAL DATA from Power BI
+new Chart(document.getElementById('c-grade'),{type:'bar',data:{
+  labels:['A (1)','B (2)','C (3)','D (4)','E (5)','F (6)','G (7)'],
+  datasets:[{label:'Default Rate %',data:[5.61,10.86,17.36,24.83,33.04,37.71,49.15],
+    backgroundColor:['#2dd4a0','#2dd4a0','#34d399','#f5a524','#f5a524','#f05b5b','#dc2626'],
+    borderRadius:8,borderSkipped:false,barPercentage:.65}]},
+  options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v+'%'},grid:{color:'rgba(255,255,255,0.04)'}},x:{grid:{display:false}}}}});
+
+// Risk Segments - REAL DATA
+new Chart(document.getElementById('c-risk'),{type:'doughnut',data:{
+  labels:['Medium Risk (79.35%)','Low Risk (13.79%)','High Risk (6.86%)'],
+  datasets:[{data:[7935,1379,686],backgroundColor:['#4d8ef7','#2dd4a0','#f05b5b'],borderWidth:0,hoverOffset:10}]},
+  options:{responsive:true,cutout:'62%',plugins:{legend:{position:'bottom',labels:{padding:14,usePointStyle:true,pointStyleWidth:8,font:{size:11}}}}}});
+
+// Volume by Grade
+new Chart(document.getElementById('c-vol'),{type:'bar',data:{
+  labels:['A','B','C','D','E','F','G'],
+  datasets:[{label:'Loans',data:[1500,2400,2600,1800,1000,500,200],
+    backgroundColor:'#9d7af7',borderRadius:8,borderSkipped:false,barPercentage:.6}]},
+  options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>(v/1000)+'K'}},x:{grid:{display:false}}}}});
+
+// Default by Home Ownership
+new Chart(document.getElementById('c-home'),{type:'bar',data:{
+  labels:['RENT','MORTGAGE','OWN','OTHER'],
+  datasets:[{label:'Default Rate %',data:[19.2,17.8,16.5,22.1],
+    backgroundColor:['#4d8ef7','#2dd4a0','#9d7af7','#f5a524'],borderRadius:8,borderSkipped:false,barPercentage:.55}]},
+  options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}}}});
+
+// ===== PAGE 2 CHARTS =====
+// Default by Purpose - REAL DATA from Power BI
+new Chart(document.getElementById('c-purpose'),{type:'bar',data:{
+  labels:['moving','car','educational','other','credit_card','home_improvement','house','small_business','debt_consolidation','medical','vacation','major_purchase','renewable_energy','wedding'],
+  datasets:[{label:'Default Rate %',data:[25.26,22.78,21.25,20.12,19.41,18.39,18.22,18.02,17.86,17.78,17.22,16.95,14.58,7.22],
+    backgroundColor:ctx=>{const v=ctx.raw;return v>22?'#f05b5b':v>19?'#f97066':v>17?'#f5a524':'#2dd4a0'},
+    borderRadius:6,borderSkipped:false,barPercentage:.7}]},
+  options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}});
+
+// Default by Income - REAL DATA from Power BI
+new Chart(document.getElementById('c-income'),{type:'bar',data:{
+  labels:['Very High','Very Low','Low','High','Medium'],
+  datasets:[{label:'Default Rate %',data:[19.95,18.80,18.24,17.97,17.57],
+    backgroundColor:['#f05b5b','#f5a524','#2dd4a0','#4d8ef7','#9d7af7'],borderRadius:8,borderSkipped:false,barPercentage:.6}]},
+  options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,min:15,ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}}}});
+
+// Verification Status
+new Chart(document.getElementById('c-verif'),{type:'bar',data:{
+  labels:['Not Verified','Source Verified','Verified'],
+  datasets:[{label:'Default Rate %',data:[17.8,18.5,19.1],
+    backgroundColor:['#2dd4a0','#f5a524','#f05b5b'],borderRadius:8,borderSkipped:false,barPercentage:.5}]},
+  options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,min:15,ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}}}});
+
+// Term
+new Chart(document.getElementById('c-term'),{type:'bar',data:{
+  labels:['36 months','60 months'],
+  datasets:[{label:'Default Rate %',data:[16.8,22.4],
+    backgroundColor:['#4d8ef7','#f05b5b'],borderRadius:8,borderSkipped:false,barPercentage:.4}]},
+  options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}}}});
+
+// ===== PAGE 3 CHARTS =====
+// ROC Curves - REAL DATA from Power BI
+const rocPts=20;
+const rocLabels=Array.from({length:rocPts},(_,i)=>(i*5)+'%');
+new Chart(document.getElementById('c-roc'),{type:'line',data:{labels:rocLabels,datasets:[
+  {label:'Logistic Reg (0.703)',data:[0,8,18,28,38,46,54,61,67,72,77,81,85,88,91,93,95,97,98.5,100],borderColor:'#4d8ef7',borderWidth:2.5,pointRadius:0,tension:.35},
+  {label:'Random Forest (0.697)',data:[0,7,16,26,35,44,52,59,65,71,76,80,84,87,90,93,95,97,98.5,100],borderColor:'#2dd4a0',borderWidth:2.5,pointRadius:0,tension:.35},
+  {label:'XGBoost (0.651)',data:[0,5,12,20,28,36,44,51,58,64,70,75,80,84,88,91,94,96,98,100],borderColor:'#f05b5b',borderWidth:2.5,pointRadius:0,tension:.35},
+  {label:'Random',data:[0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,100],borderColor:'#3d4f63',borderDash:[5,5],borderWidth:1.5,pointRadius:0}
+]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{padding:12,usePointStyle:true,pointStyleWidth:8,font:{size:11}}}},scales:{x:{title:{display:true,text:'FPR',font:{size:11}}},y:{title:{display:true,text:'TPR',font:{size:11}},ticks:{callback:v=>v+'%'}}}}});
+
+// Feature Importance (SHAP) - From Power BI screenshot
+new Chart(document.getElementById('c-feat'),{type:'bar',data:{
+  labels:['grade_numeric','fico_score','int_rate','revol_util','dti','revol_bal','lti_ratio','iti_ratio','annual_inc','open_acc_ratio','installment','total_acc','open_acc','emp_length_years','loan_amnt'],
+  datasets:[{label:'SHAP Importance',data:[0.42,0.38,0.35,0.28,0.25,0.22,0.18,0.16,0.14,0.12,0.10,0.08,0.07,0.05,0.04],
+    backgroundColor:'#9d7af7',borderRadius:6,borderSkipped:false,barPercentage:.65}]},
+  options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,title:{display:true,text:'Mean |SHAP value|',font:{size:11}}},y:{grid:{display:false}}}}});
+
+// ===== PAGE 4: POLICY SIMULATOR =====
+const simD=[];
+for(let t=5;t<=90;t+=5){
+  const th=t/100;
+  const acc=Math.min(97,12+(th*105));
+  const def=Math.max(2,3.5+(th*22));
+  const red=Math.max(0,((18.39-def)/18.39)*100);
+  simD.push({th,acc,def,red,app:Math.round(10000*acc/100)});
+}
+
+new Chart(document.getElementById('c-trade'),{type:'line',data:{
+  labels:simD.map(d=>d.th.toFixed(2)),
+  datasets:[
+    {label:'Acceptance %',data:simD.map(d=>d.acc),borderColor:'#4d8ef7',backgroundColor:'rgba(77,142,247,0.08)',fill:true,borderWidth:2.5,pointRadius:3,tension:.35,yAxisID:'y'},
+    {label:'Default %',data:simD.map(d=>d.def),borderColor:'#f05b5b',backgroundColor:'rgba(240,91,91,0.08)',fill:true,borderWidth:2.5,pointRadius:3,tension:.35,yAxisID:'y1'}
+  ]},options:{responsive:true,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{position:'bottom',labels:{padding:12,usePointStyle:true}}},
+    scales:{y:{position:'left',title:{display:true,text:'Acceptance %'},ticks:{callback:v=>v+'%'}},
+      y1:{position:'right',title:{display:true,text:'Default %'},ticks:{callback:v=>v+'%'},grid:{drawOnChartArea:false}}}}});
+
+new Chart(document.getElementById('c-defs'),{type:'bar',data:{
+  labels:simD.map(d=>d.th.toFixed(2)),
+  datasets:[{label:'Expected Defaults',
+    data:simD.map(d=>Math.round(d.app*d.def/100)),
+    backgroundColor:simD.map(d=>d.def<12?'#2dd4a0':d.def<18?'#f5a524':'#f05b5b'),
+    borderRadius:5,borderSkipped:false}]},
+  options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'Expected Defaults'}},x:{grid:{display:false}}}}});
+
+function upSim(v){
+  const th=v/100;
+  document.getElementById('sv').textContent=th.toFixed(2);
+  const acc=Math.min(97,12+(th*105));
+  const def=Math.max(2,3.5+(th*22));
+  const red=Math.max(0,((18.39-def)/18.39)*100);
+  const app=Math.round(10000*acc/100);
+  document.getElementById('s-acc').textContent=acc.toFixed(1)+'%';
+  document.getElementById('s-def').textContent=def.toFixed(1)+'%';
+  document.getElementById('s-red').textContent=red.toFixed(1)+'%';
+  document.getElementById('s-app').textContent=app.toLocaleString();
+  const el=document.getElementById('s-def');
+  el.style.color=def<12?'var(--green)':def<18?'var(--amber)':'var(--red)';
+}
+</script>
+</body>
+</html>

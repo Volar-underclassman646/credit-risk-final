@@ -1,0 +1,29 @@
+{
+  "optimal": {
+    "threshold": 0.4453,
+    "acceptance_rate": 0.5145,
+    "default_rate": 0.0991,
+    "approved": 1029,
+    "defaults": 102
+  },
+  "benchmark": {
+    "binary_search_time_ms": 1.166,
+    "linear_search_time_ms": 2.395,
+    "speedup": "2.1x faster",
+    "binary_search_result": {
+      "threshold": 0.4453,
+      "acceptance_rate": 0.5145,
+      "default_rate": 0.0991,
+      "approved": 1029,
+      "defaults": 102
+    },
+    "linear_search_result": {
+      "threshold": 0.44,
+      "acceptance_rate": 0.504,
+      "default_rate": 0.0992,
+      "approved": 1008,
+      "defaults": 100
+    },
+    "data_size": 2000
+  }
+}
