@@ -71,7 +71,7 @@ class TestSlidingWindow:
         defaults = [0, 0, 1, 0, 1, 1, 0, 0, 0, 1]
         rates = sliding_window_default_rate(defaults, window_size=5)
         assert len(rates) == 6  # n - window_size + 1
-        assert rates[0] == 1/5  # first window: [0,0,1,0,1]
+        assert rates[0] == 2/5  # first window: [0,0,1,0,1] has 2 defaults
     
     def test_all_defaults(self):
         defaults = [1, 1, 1, 1, 1]
