@@ -17,8 +17,8 @@ End-to-end credit risk prediction system — from raw Lending Club data to a dep
 <a href="https://pandas.pydata.org/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/pandas/pandas-original.svg" alt="pandas" width="40" height="40"/></a>
 <a href="https://numpy.org/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/numpy/numpy-original.svg" alt="numpy" width="40" height="40"/></a>
 <a href="https://docs.pytest.org/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/pytest/pytest-original.svg" alt="pytest" width="40" height="40"/></a>
-<a href="https://shap.readthedocs.io/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/shap/shap/master/docs/artwork/shap_logo.svg" alt="shap" width="40" height="40"/></a>
-<a href="https://powerbi.microsoft.com/" target="_blank" rel="noreferrer"><img src="https://cdn.worldvectorlogo.com/logos/power-bi-2.svg" alt="powerbi" width="40" height="40"/></a>
+<a href="https://shap.readthedocs.io/" target="_blank" rel="noreferrer"><img src="assets/shap.png" alt="shap" width="40" height="40"/></a>
+<a href="https://powerbi.microsoft.com/" target="_blank" rel="noreferrer"><img src="assets/powerbi.svg" alt="powerbi" width="40" height="40"/></a>
 <a href="#algorithms--data-structures" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/TheAlgorithms/website/main/public/logo.svg" alt="dsa" width="40" height="40"/></a>
 </p>
 
