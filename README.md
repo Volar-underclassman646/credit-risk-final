@@ -76,13 +76,14 @@ Binary search finds the optimal approval threshold balancing acceptance rate vs.
 | Layer | Technology |
 |-------|-----------|
 | **ML** | scikit-learn, XGBoost, SHAP, SMOTE (imbalanced-learn) |
-| **Data Structres** | LRU Cache, Binary Search, Min-Heap, Hash Map |
+| **DSA** | LRU Cache, Binary Search, Min-Heap, Sliding Window, Prefix Sums, Hash Map |
 | **API** | FastAPI, Uvicorn, Pydantic validation |
-| **Database** | PostgreSQL on Azure|
-| **Cloud** | Azure Blob Storage, Azure PostgreSQL |
+| **Database** | PostgreSQL on Azure, SQLAlchemy ORM |
+| **Cloud** | Azure Blob Storage, Azure PostgreSQL, Azure Identity |
 | **Data** | Pandas, NumPy, Statsmodels |
-| **Testing** | pytest (38+ test cases) |
-| **Visualization** | Matplotlib, Seaborn, Power BI, Chart.js|
+| **DevOps** | Docker, GitHub Actions CI/CD, Git |
+| **Testing** | pytest (41 test cases) |
+| **Visualization** | Matplotlib, Seaborn, Power BI, Chart.js |
 
 ---
 
