@@ -2,12 +2,19 @@
 
 End-to-end credit risk prediction system — from raw Lending Club data to a deployed FastAPI scoring API on Azure Cloud.
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?logo=fastapi)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Azure-336791?logo=postgresql)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3.2-f7931e?logo=scikitlearn)
-![XGBoost](https://img.shields.io/badge/XGBoost-2.0.3-red)
-![Azure](https://img.shields.io/badge/Deployed-Azure%20Cloud-0078D4?logo=microsoftazure)
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3.2-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
+![XGBoost](https://img.shields.io/badge/XGBoost-2.0.3-EC4E20?style=for-the-badge&logo=xgboost&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Azure-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![Azure](https://img.shields.io/badge/Azure-Cloud-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Container-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Git](https://img.shields.io/badge/Git-VCS-F05032?style=for-the-badge&logo=git&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI/CD-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-2.1.4-150458?style=for-the-badge&logo=pandas&logoColor=white)
+![NumPy](https://img.shields.io/badge/NumPy-1.26-013243?style=for-the-badge&logo=numpy&logoColor=white)
+![Pytest](https://img.shields.io/badge/Pytest-41_Tests-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)
+
 ![Tests](https://github.com/gitadi2/credit-risk-final/actions/workflows/ci.yml/badge.svg)
 
 ---
